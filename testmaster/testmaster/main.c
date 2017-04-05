@@ -32,11 +32,13 @@ void writeString(char *string);
 
 void Input(char in);
 int ping();
-void turnTo(int hoek);
+//void turnTo(int hoek);
 int leesKompas();
 char *windrichting(int hoek);
 void gaNaarHoekR(int hoek);
 void gaNaarHoekL(int hoek);
+
+void motorStop(int max);
 
 int main(void)
 {
@@ -48,8 +50,8 @@ int main(void)
 	//gaNaarHoekR(90);
 	while (1)
 	{
-		verzenden(RP6, 30);
-		_delay_ms(100);
+		//verzenden(RP6, 30);
+		//_delay_ms(100);
 	}
 
 }
@@ -305,3 +307,21 @@ void gaNaarHoekL(int hoek){
 		verzenden(RP6, 0);
 	}
 }
+
+void motorStop(int max){
+	uint8_t L[10];
+	while (1)
+	{
+		_delay_ms(5);
+		ontvangen(DEVICE_ADRES, L, 1);
+		//writeInteger(L[0],10);
+		//writeString("\r\n");
+		if(L[0] == max){
+			verzenden(DEVICE_ADRES, 20);
+			//writeString(" Ik ben klaar");
+			//return 0;
+			break;
+		}
+	}
+}
+
