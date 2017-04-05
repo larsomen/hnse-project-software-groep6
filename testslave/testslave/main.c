@@ -89,7 +89,7 @@ volatile uint8_t data_flag = FALSE;
 volatile uint8_t databyte=0x33;
 
 void ontvangData(uint8_t [],uint8_t);
-uint8_t verzendByte(uint8_t x);
+uint8_t verzendByte();
 
 uint16_t encoder_L_count;
 uint16_t encoder_R_count;
@@ -126,20 +126,9 @@ int main(void)
 	int drivenL;
     while (1) 
     {  
-		//control(data_ont[0]);
-		//data_ont[0] = 255;
-		//_delay_ms(10);
-		uint16_t hoek;
-
-		writeInteger(data_ont[0],10);
-		writeChar('\t');
-		writeInteger(data_ont[1],10);
-		writeChar('\t');
-		hoek = ((data_ont[1]<<8)+data_ont[0]);
-		writeInteger(hoek,10);
-		writeString("\r\n");
-
-
+		control(data_ont[0]);
+		data_ont[0] = 255;
+		_delay_ms(10);
     }
 	
 }
@@ -158,8 +147,8 @@ void ontvangData(uint8_t data[],uint8_t tel){
 in dit voorbeeld een eenvoudige teller
 */
 
-uint8_t verzendByte(uint8_t x) {
-		return x;
+uint8_t verzendByte() {
+		return encoder_Count_to_Centimeter(encoder_L_driven);
 }
 
 void init_i2c_slave(uint8_t ad) {
@@ -332,6 +321,13 @@ void control(int inByte){
 		directionR = 1;
 		speedL = 75;
 		speedR = 75;
+	}
+
+	if(inByte == 20){
+		speedL = 0;
+		speedR = 0;
+		encoder_L_driven = 0;
+		encoder_R_driven = 0;
 	}
 
 	if(inByte == 0){
